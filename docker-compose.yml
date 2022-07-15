@@ -1,0 +1,49 @@
+version: '3.5'
+
+services:
+  web:
+    build:
+      context: .
+      target: BUILD_IMAGE
+    container_name: reporting
+    ports:
+      - 8081:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/reporting
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      RABBITMAQ_URL: "amqp://localhost:5672"
+      RABBITMAQ_USERNAME: "rabbit"
+      RABBITMAQ_PASSWORD: "rabbit"
+      RABBITMQ_QUEUES_REPORTING: "call.reporting"
+    depends_on:
+      - db
+      - broker
+
+  db:
+    image: postgres:14.1-alpine
+    container_name: postgresql
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5433:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  broker:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbit
+      RABBITMQ_DEFAULT_PASS: rabbit
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+volumes:
+  db:
+    driver: local
