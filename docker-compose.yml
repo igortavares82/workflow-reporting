@@ -1,7 +1,7 @@
 version: '3.5'
 
 services:
-  web:
+  reporting-web:
     build:
       context: .
       target: BUILD_IMAGE
@@ -21,7 +21,7 @@ services:
       - broker
 
   db:
-    image: postgres:14.1-alpine
+    image: postgres:14.1-alpined
     container_name: postgresql
     restart: always
     environment:
@@ -44,6 +44,12 @@ services:
     volumes:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - net
+
 volumes:
   db:
     driver: local
+networks:
+  net:
+    external: true

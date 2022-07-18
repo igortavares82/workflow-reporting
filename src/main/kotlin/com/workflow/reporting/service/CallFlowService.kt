@@ -1,6 +1,7 @@
 package com.workflow.reporting.service
 
 import com.workflow.reporting.configuration.RabbitMqConfig
+import com.workflow.reporting.model.CallFlow
 import com.workflow.reporting.repository.ICallFlowRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -9,18 +10,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class CallFlowService(
-    private val callFlowRepository: ICallFlowRepository,
-    private val rabbitMqConfig: RabbitMqConfig,
-    @Value("rabbitmq.queues.reporting") val reportingQueueName: String
+    private val callFlowRepository: ICallFlowRepository
 ): ICallFlowService {
 
-    override fun get() {
-        TODO("Not yet implemented")
-    }
+    override fun get(): List<CallFlow> = callFlowRepository.findAll().toList()
 
-    @EventListener(ApplicationReadyEvent::class)
-    override fun onApplicationStarts() {
-        val consumer = rabbitMqConfig.getReportingConsumer(reportingQueueName, listOf("call.reporting"))
-        consumer.start()
+    override fun getByCallId(callId: String): CallFlow = callFlowRepository.getFirstByCallId(callId)
+
+    override fun create(model: CallFlow) {
+        callFlowRepository.save(model)
     }
 }
