@@ -15,9 +15,9 @@ import org.springframework.context.event.EventListener
 
 @Configuration
 class RabbitMqConfig(
-    @Value("\${rabbitmq.url}") val rabbitMqUrl: String,
-    @Value("\${rabbitmq.username}") val rabbitMqUsername: String,
-    @Value("\${rabbitmq.password}") val rabbitMqPassword: String,
+    @Value("\${spring.rabbitmq.url}") val rabbitMqUrl: String,
+    @Value("\${spring.rabbitmq.username}") val rabbitMqUsername: String,
+    @Value("\${spring.rabbitmq.password}") val rabbitMqPassword: String,
     val handlers: List<EventHandler<*>>
 ) {
 

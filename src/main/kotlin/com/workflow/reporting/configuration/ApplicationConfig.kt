@@ -1,10 +1,11 @@
 package com.workflow.reporting.configuration
 
 import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.annotation.Configuration
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 
-@Component
+@Configuration
 class ApplicationConfig(
     val rabbitMqConfig: RabbitMqConfig
 ) {

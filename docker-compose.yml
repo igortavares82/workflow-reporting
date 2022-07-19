@@ -7,23 +7,28 @@ services:
       target: BUILD_IMAGE
     container_name: reporting
     ports:
-      - 8081:8080
+      - 8082:8082
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/reporting
+      SPRING_DATASOURCE_URL: jdbc:postgresql://reporting-db:5432/reporting
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-      RABBITMAQ_URL: "amqp://localhost:5672"
-      RABBITMAQ_USERNAME: "rabbit"
-      RABBITMAQ_PASSWORD: "rabbit"
-      RABBITMQ_QUEUES_REPORTING: "call.reporting"
+      SPRING_RABBITMAQ_URL: amqp://broker:5672
+      SPRING_RABBITMAQ_USERNAME: "rabbit"
+      SPRING_RABBITMAQ_PASSWORD: "rabbit"
+      SPRING_RABBITMQ_QUEUES_REPORTING: "call.reporting"
     depends_on:
-      - db
       - broker
+      - reporting-db
+    networks:
+      - net
+    restart: on-failure
+    command:
+      - wait tcp://broker:5672
+      - wait tcp://reporting-db:5433
 
-  db:
-    image: postgres:14.1-alpined
+  reporting-db:
+    image: postgres:14.1-alpine
     container_name: postgresql
-    restart: always
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -31,6 +36,8 @@ services:
       - 5433:5432
     volumes:
       - db:/var/lib/postgresql/data
+    networks:
+      - net
 
   broker:
     image: rabbitmq:3-management-alpine

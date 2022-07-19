@@ -1,6 +1,6 @@
 CREATE DATABASE reporting;
 
-CREATE TABLE CallFlow (
+CREATE TABLE callflow (
     callId          VARCHAR(60) PRIMARY KEY,
     startDate       DATE NOT NULL,
     endDate         DATE,

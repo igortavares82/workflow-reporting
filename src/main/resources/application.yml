@@ -8,10 +8,9 @@ spring:
     url: "jdbc:postgresql://localhost:5433/reporting"
     username: postgres
     password: postgres
-
-rabbitmq:
-  url: "amqp://localhost:5672"
-  username: "rabbit"
-  password: "rabbit"
-  queues:
-    reporting: "call.reporting"
+  rabbitmq:
+    url: "amqp://broker:5672"
+    username: "rabbit"
+    password: "rabbit"
+    queues:
+      reporting: "call.reporting"

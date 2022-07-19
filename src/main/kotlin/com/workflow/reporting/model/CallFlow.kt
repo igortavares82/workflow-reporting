@@ -1,14 +1,11 @@
 package com.workflow.reporting.model
 
-import java.time.Instant
 import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
-import javax.persistence.Table
 
-@Entity
-@Table(name = "callflow")
+@Entity(name = "callflow")
 data class CallFlow (
 
     @Id
@@ -16,10 +13,10 @@ data class CallFlow (
     val callId: String,
 
     @Column(name = "startdate")
-    val startDate: Instant,
+    val startDate: Date,
 
     @Column(name = "enddate")
-    val endDate: Instant?,
+    val endDate: Date?,
 
     @Column(name = "costumernumber")
     val costumerNumber: String,
